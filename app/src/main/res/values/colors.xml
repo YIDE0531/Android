@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D60665</color>
+
+    <color name="foodpanda_main">#D60665</color>
+    <color name="foodpanda_while">#ffffff</color>
+    <color name="foodpanda_announcement">#FFF9E9</color>
+    <color name="foodpanda_back">#000000</color>
+    <color name="foodpanda_transparent">#00000000</color>
+</resources>
