@@ -1,11 +1,10 @@
 package com.example.foodpanda.Model;
 
 public class MenuModel {
-    public String itemTitle, itemName, itemPrice;
+    public String itemTitle, itemName, itemPrice, itemPicture;
     public boolean isTitle;
-    public int itemPicture;
 
-    public MenuModel(String itemTitle, String itemName, String itemPrice, boolean isTitle, int langLogo){
+    public MenuModel(String itemTitle, String itemName, String itemPrice, boolean isTitle, String langLogo){
         this.itemTitle = itemTitle;
         this.itemName = itemName;
         this.itemPrice = itemPrice;
@@ -13,11 +12,11 @@ public class MenuModel {
         this.itemPicture = langLogo;
     }
 
-    public void setLangLogo(int itemPicture){
+    public void setLangLogo(String itemPicture){
         this.itemPicture = itemPicture;
     }
 
-    public int getLangLogo(){
+    public String getLangLogo(){
         return itemPicture;
     }
 }

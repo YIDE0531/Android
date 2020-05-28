@@ -1,16 +1,23 @@
 package com.example.foodpanda.Model;
 
 public class AllModel {
-    public String image, name;
+    public String image, name, infoUrl, title, titleNum, price;
     public int data;
 
-    public AllModel(String friendname, String friendaccount) {
-        this.image = friendname;
-        this.name = friendaccount;
+    public AllModel(String image, String name) {
+        this.image = image;
+        this.name = name;
     }
-    AllModel(String friendname, String friendaccount, int data) {
-        this.image = friendname;
-        this.name = friendaccount;
+    public AllModel(String image, String name, String infoUrl) {
+        this.image = image;
+        this.name = name;
+        this.infoUrl = infoUrl;
     }
-
+    public AllModel(String title, String titleNum, String name, String image, String price) {
+        this.title = title;
+        this.titleNum = titleNum;
+        this.name = name;
+        this.image = image;
+        this.price = price;
+    }
 }

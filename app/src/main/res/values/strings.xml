@@ -21,6 +21,7 @@
     <string name="action_confirm">確認</string>
     <string name="action_leave">離開</string>
     <string name="action_cancel">取消</string>
+    <string name="food">美食</string>
 
     <array name="day">
         <item>今天, 5月 18</item>
@@ -41,4 +42,7 @@
         <item>12:45 下午</item>
     </array>
 
+    <string name="select_1">現在位置</string>
+    <string name="select_2">家</string>
+    <string name="select_3">新增住址</string>
 </resources>

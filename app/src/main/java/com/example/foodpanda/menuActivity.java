@@ -8,23 +8,31 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.foodpanda.Adapter.menuAdaper;
+import com.example.foodpanda.Model.AllModel;
 import com.example.foodpanda.Model.MenuModel;
+import com.example.foodpanda.Model.PIModel;
+import com.example.foodpanda.Service.CallApiTask;
+import com.example.foodpanda.config.AppConfig;
 import com.example.foodpanda.util.DialogUtility;
+import com.example.foodpanda.views.ProgressDialogUtil;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
-public class menuActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
+public class menuActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener, CallApiTask.apiCallBack {
     private TabLayout toolbar_tab;
     private String[] title = {"※注意事項","季節限定","愛茶如牛","牧場鮮奶茶","綠光牧場鮮奶","手作特調"};
     private RecyclerView rvShow;
@@ -37,11 +45,14 @@ public class menuActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
     private boolean mIsTheTitleVisible          = false;
     private boolean mIsTheTitleContainerVisible = true;
-    private TextView tvTitle;
-    private ImageView imvBack, imvInfo, imvBackWhite, imvInfoWhite ;
+    private TextView tvTitle, tvShopName;
+    private ImageView imvBack, imvInfo, imvBackWhite, imvInfoWhite, imvHeader ;
     private ConstraintLayout consTitleShrink, consMinute, consTime;
-    private ArrayList dataList;
+    private ArrayList<MenuModel> dataList;
     private Context mContext;
+    private String infoUrl, ShopName, ShopImage;
+    private CallApiTask.apiCallBack apiCallBack;
+
 
     /**
      * 需要定位的地方，从小到大排列，需要和tab对应起来，长度一样
@@ -53,10 +64,22 @@ public class menuActivity extends AppCompatActivity implements AppBarLayout.OnOf
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         mContext = menuActivity.this;
+        apiCallBack = menuActivity.this;
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        infoUrl = bundle.getString("infoUrl");
+        ShopName = bundle.getString("ShopName");
+        ShopImage = bundle.getString("ShopImage");
 
         initView();
         initData();
         initListener();
+
+        ProgressDialogUtil progressDialogUtil = new ProgressDialogUtil();
+
+        progressDialogUtil.showProgressDialog(mContext);
+        new CallApiTask(mContext, progressDialogUtil, apiCallBack, "getInfo").execute(AppConfig.getUrlPath() + "getInfo.php?infoUrl="+infoUrl);
     }
 
     void initView(){
@@ -64,9 +87,11 @@ public class menuActivity extends AppCompatActivity implements AppBarLayout.OnOf
         rvShow = (RecyclerView)findViewById(R.id.recycler_menu_item);
         ctlScroll = (CollapsingToolbarLayout)findViewById(R.id.collapsing_tool_bar_test_ctl);
         tvTitle = (TextView) findViewById(R.id.tv_title);
+        tvShopName = (TextView) findViewById(R.id.tv_shopName);
         imvBack = (ImageView) findViewById(R.id.imv_back);
         imvInfo = (ImageView) findViewById(R.id.imv_info);
         imvBack = (ImageView) findViewById(R.id.imv_back);
+        imvHeader = (ImageView) findViewById(R.id.imv_header);
         imvBackWhite = (ImageView) findViewById(R.id.imv_back_white);
         imvInfoWhite = (ImageView) findViewById(R.id.imv_info_white);
         consTitleShrink = (ConstraintLayout) findViewById(R.id.cons_title_shrink);
@@ -78,83 +103,11 @@ public class menuActivity extends AppCompatActivity implements AppBarLayout.OnOf
     }
 
     void initData() {
-        toolbar_tab.removeAllTabs();
-        for(int i=0;i<title.length;i++){
-            TabLayout.Tab tab1 = toolbar_tab.newTab().setText(title[i]);
-            toolbar_tab.addTab(tab1);
-        }
-        toolbar_tab.setTabMode(TabLayout.MODE_SCROLLABLE);
-
-        dataList = new ArrayList<>();
-        String[] title = {
-                "※注意事項",
-                "季節限定",
-                "",
-                "愛茶如牛",
-                "","","","","","","","",
-                "牧場鮮奶茶",
-                "","","","","","","","","","","","","","","","","","","","","",
-                "綠光牧場鮮奶",
-                "","","","","","","","","","",
-                "手作特調",
-                "","","","","","","",""
-        };
-
-        int[] str2 = {0, 1, 3, 12, 34, 45};
-        str1 = str2;
-        
-        String[] itemName = {
-                "※為響應環保減塑，本店不主動提供塑膠袋。如需....",
-                "焙茶鮮奶L",
-                "焙茶鮮奶M",
-                "大正紅茶L",
-                "英倫伯爵紅茶L","初露青茶L","決明大麥M","英倫伯爵紅茶L","初露青茶L","決明大麥M","英倫伯爵紅茶L","初露青茶L",
-                "珍珠大正紅茶拿鐵L",
-                "珍珠伯爵紅茶拿鐵L","大正紅茶拿鐵L","紅茶大正紅茶拿鐵M","高峰烏龍拿鐵L","珍珠伯爵紅茶拿鐵L","大正紅茶拿鐵L","紅茶大正紅茶拿鐵M","高峰烏龍拿鐵L","珍珠伯爵紅茶拿鐵L","大正紅茶拿鐵L","紅茶大正紅茶拿鐵M","高峰烏龍拿鐵L","珍珠伯爵紅茶拿鐵L","大正紅茶拿鐵L","紅茶大正紅茶拿鐵M","高峰烏龍拿鐵L","珍珠伯爵紅茶拿鐵L","大正紅茶拿鐵L","紅茶大正紅茶拿鐵M","高峰烏龍拿鐵L","大正紅茶拿鐵L",
-                "珍珠鮮奶L",
-                "初雲抹茶拿鐵L","手炒黑糖鮮奶M","布丁鮮奶L","初雲抹茶拿鐵L","手炒黑糖鮮奶M","布丁鮮奶L","初雲抹茶拿鐵L","手炒黑糖鮮奶M","初雲抹茶拿鐵L","手炒黑糖鮮奶M",
-                "大正紅茶鮮豆奶L",
-                "伯爵紅茶鮮豆奶L","柳丁綠茶L","香柚綠茶M","養樂多綠L","伯爵紅茶鮮豆奶L","柳丁綠茶L","香柚綠茶M","養樂多綠L"
-        };
-
-        String[] itemPricce = {
-                "$ 1",
-                "$ 85 起",
-                "$ 65 起",
-                "$ 35 起",
-                "$ 40 起","$ 35 起","$ 35 起","$ 30 起","$ 40 起","$ 35 起","$ 35 起","$ 30 起",
-                "$ 70 起",
-                "$ 40 起","$ 35 起","$ 35 起","$ 30 起","$ 40 起","$ 40 起","$ 35 起","$ 35 起","$ 30 起","$ 40 起","$ 40 起","$ 35 起","$ 35 起","$ 30 起","$ 40 起","$ 40 起","$ 35 起","$ 35 起","$ 30 起","$ 40 起","$ 30 起",
-                "$ 90 起",
-                "$ 95 起","$ 105 起","$ 95 起","$ 105 起","$ 95 起","$ 105 起","$ 95 起","$ 105 起","$ 95 起","$ 105 起",
-                "$ 60 起",
-                "$ 65 起","$ 60 起","$ 55 起","$ 45 起","$ 30 起","$ 65 起","$ 60 起","$ 60 起"
-        };
-
-        int[] itemPicture = {
-                0,
-                0,
-                R.drawable.item,
-                R.drawable.item,
-                0,0,R.drawable.item,R.drawable.item,R.drawable.item,R.drawable.item,0,R.drawable.item,
-                R.drawable.item,
-                R.drawable.item,R.drawable.item,0,0,0,R.drawable.item,R.drawable.item,R.drawable.item,R.drawable.item,R.drawable.item,R.drawable.item,R.drawable.item,R.drawable.item,R.drawable.item,R.drawable.item,R.drawable.item,R.drawable.item,R.drawable.item,R.drawable.item,R.drawable.item,0,
-                0,
-                R.drawable.item,R.drawable.item,R.drawable.item,0,0,0,0,R.drawable.item,0,0,
-                R.drawable.item,
-                0,0,0,0,R.drawable.item,R.drawable.item,R.drawable.item,R.drawable.item
-        };
-
-        for (int i = 0; i < title.length; i++) {
-            MenuModel model = new MenuModel(title[i], itemName[i], itemPricce[i], true, itemPicture[i]);
-            dataList.add(model);
-        }
-        
+        tvShopName.setText(ShopName);
+        Glide.with(mContext).load(ShopImage)
+                .thumbnail(Glide.with(mContext).load(R.drawable.loading))
+                .into(imvHeader);
         manager = new LinearLayoutManager(this);
-        rvShow.setLayoutManager(manager);
-        menuAdaper menuAdaper = new menuAdaper(menuActivity.this, dataList,R.layout.layout_menu_item);
-        rvShow.setAdapter(menuAdaper);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         /*setSupportActionBar(toolbar);
@@ -369,5 +322,56 @@ public class menuActivity extends AppCompatActivity implements AppBarLayout.OnOf
     protected void onRestart() {
         super.onRestart();
         Toast.makeText(this, "onRestart", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void result(AllModel allModel) {
+        String[] titleArray, titleNumArray, nameArray, imageArray, priceArray ;
+        titleArray = allModel.title.split(",");
+        titleNumArray = allModel.titleNum.split(",");
+        nameArray = allModel.name.split(",");
+        imageArray = allModel.image.split(",");
+        priceArray = allModel.price.split(",");
+
+        str1 = convert(titleNumArray);
+
+        String[] db = nameArray.clone();
+        int pp = 0;
+        for(int i=0;i<nameArray.length;i++){
+            if(i==Integer.valueOf(titleNumArray[pp])){
+                db[i] = titleArray[pp];
+                pp++;
+            }else{
+                db[i] = "notfind";
+            }
+        }
+        title = titleArray;
+        toolbar_tab.removeAllTabs();
+        for(int i=0;i<title.length;i++){
+            TabLayout.Tab tab1 = toolbar_tab.newTab().setText(title[i]);
+            toolbar_tab.addTab(tab1);
+        }
+        toolbar_tab.setTabMode(TabLayout.MODE_SCROLLABLE);
+        titleArray = db;
+
+        dataList = new ArrayList<MenuModel>();
+        for(int i=0;i<nameArray.length;i++){
+            MenuModel model = new MenuModel(titleArray[i], nameArray[i], priceArray[i], true, imageArray[i]);
+            dataList.add(model);
+        }
+        manager = new LinearLayoutManager(this);
+        rvShow.setLayoutManager(manager);
+        menuAdaper menuAdaper = new menuAdaper(menuActivity.this, dataList,R.layout.layout_menu_item);
+        rvShow.setAdapter(menuAdaper);
+
+    }
+
+    private int[] convert(String[] string) { //Note the [] after the String.
+        int number[] = new int[string.length];
+
+        for (int i = 0; i < string.length; i++) {
+            number[i] = Integer.parseInt(string[i]);
+        }
+        return number;
     }
 }

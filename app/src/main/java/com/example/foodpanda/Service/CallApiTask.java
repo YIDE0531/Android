@@ -24,10 +24,11 @@ public class CallApiTask extends AsyncTask<String, Void, String> {     //2020/4/
     private JsonAnalysis jsonAnalysis;
     private String phpName;
 
-    public CallApiTask(Context context, ProgressDialogUtil progressDialogUtil, apiCallBack apiCallBack){
+    public CallApiTask(Context context, ProgressDialogUtil progressDialogUtil, apiCallBack apiCallBack, String apiName){
         this.mContext = context;
         this.progressDialogUtil = progressDialogUtil;
         this.apiCallBack = apiCallBack;
+        this.phpName = apiName;
         this.jsonAnalysis = new JsonAnalysis();
 
     }
@@ -37,7 +38,6 @@ public class CallApiTask extends AsyncTask<String, Void, String> {     //2020/4/
         try {
             /* Open a connection to that URL. */
             URL url = new URL(urls[0]);
-            phpName = "getData";
             final HttpsURLConnection aHttpURLConnection = (HttpsURLConnection)url.openConnection();
             aHttpURLConnection.setDoInput(true);
 
@@ -55,7 +55,6 @@ public class CallApiTask extends AsyncTask<String, Void, String> {     //2020/4/
                 BufferedInputStream aBufferedInputStream = new BufferedInputStream(
                         aInputStream);
                 /* Read bytes to the Buffer until there is nothing more to read(-1) */
-                StringBuffer aByteArrayBuffer = new StringBuffer();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
                 byte[] buffer = new byte[1024];

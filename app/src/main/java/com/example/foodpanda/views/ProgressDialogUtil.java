@@ -28,8 +28,8 @@ public class ProgressDialogUtil {
         mAlertDialog.setView(loadView, 0, 0, 0, 0);
         mAlertDialog.setCanceledOnTouchOutside(false);
 
-        TextView tvTip = loadView.findViewById(R.id.tvTip);
-        tvTip.setText("載入中...");
+//        TextView tvTip = loadView.findViewById(R.id.tvTip);
+//        tvTip.setText("載入中...");
 
         mAlertDialog.show();
     }
@@ -47,8 +47,8 @@ public class ProgressDialogUtil {
         mAlertDialog.setView(loadView, 0, 0, 0, 0);
         mAlertDialog.setCanceledOnTouchOutside(false);
 
-        TextView tvTip = loadView.findViewById(R.id.tvTip);
-        tvTip.setText(tip);
+//        TextView tvTip = loadView.findViewById(R.id.tvTip);
+//        tvTip.setText(tip);
 
         mAlertDialog.show();
     }

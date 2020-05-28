@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.foodpanda.Model.MainModel;
 import com.example.foodpanda.R;
 
@@ -34,7 +35,9 @@ public class MainAdaper extends RecyclerView.Adapter<MainAdaper.ViewHandler> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHandler holder, int position) {
-        Glide.with(context).load(mainModels.get(position).getLangLogo()).into(holder.imageView);
+        Glide.with(context).load(mainModels.get(position).getLangLogo())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(holder.imageView);
     }
 
     @Override

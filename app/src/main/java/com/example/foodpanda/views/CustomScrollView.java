@@ -77,6 +77,7 @@ public class CustomScrollView extends NestedScrollView {
 
                 }
             }
+            mOnScrollChangeListener.onScrollChange();
         }
 
     }
@@ -87,6 +88,8 @@ public class CustomScrollView extends NestedScrollView {
         void onScrollToStart();
         //滑动到底部时的回调
         void onScrollToEnd();
+
+        void onScrollChange();
     }
 
     public void setOnScrollChangeListener(OnScrollChangeListener onScrollChangeListener) {

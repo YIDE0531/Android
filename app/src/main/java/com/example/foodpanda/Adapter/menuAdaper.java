@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.foodpanda.Model.MenuModel;
 import com.example.foodpanda.R;
 
@@ -37,20 +38,23 @@ public class menuAdaper extends RecyclerView.Adapter<menuAdaper.ViewHandler> {
 
     @Override
     public void onBindViewHolder(@NonNull menuAdaper.ViewHandler holder, int position) {
-        if(MenuModel.get(position).getLangLogo()==0){
+        if(MenuModel.get(position).getLangLogo().equals("notfind")){
             holder.imvItem.setVisibility(View.GONE);
         }else{
             holder.imvItem.setVisibility(View.VISIBLE);
-            Glide.with(context).load(MenuModel.get(position).getLangLogo()).into(holder.imvItem);
+            Glide.with(context).load(MenuModel.get(position).getLangLogo())
+                    .thumbnail(Glide.with(context).load(R.drawable.loading))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(holder.imvItem);
         }
-        if(MenuModel.get(position).itemTitle.equals("")){
+        if(MenuModel.get(position).itemTitle.equals("notfind")){
             holder.tvTitle.setVisibility(View.GONE);
         }else{
             holder.tvTitle.setVisibility(View.VISIBLE);
             holder.tvTitle.setText(MenuModel.get(position).itemTitle);
         }
         if(position < MenuModel.size()-1) {
-            if (!MenuModel.get(position + 1).itemTitle.equals("")) {
+            if (!MenuModel.get(position + 1).itemTitle.equals("notfind")) {
                 holder.viewItem.setVisibility(View.GONE);
                 holder.viewGroup.setVisibility(View.VISIBLE);
             } else {

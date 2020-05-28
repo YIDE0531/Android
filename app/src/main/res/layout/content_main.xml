@@ -1,200 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/main_layout"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    tools:context=".MainActivity">
 
+    <!-- our tablayout to display tabs  -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <!-- our tablayout to display tabs  -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/toolbar_tab"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="67dp"
         android:layout_gravity="bottom"
         android:background="@color/foodpanda_while"
-        app:tabMode="fixed"
+        android:elevation="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout2"
         app:layout_scrollFlags="scroll"
         app:tabIndicatorColor="@color/foodpanda_main"
         app:tabIndicatorHeight="2.0dp"
+        app:tabMode="fixed"
         app:tabSelectedTextColor="@color/foodpanda_main"
-        app:tabTextColor="#ced0d3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:elevation="8dp">
+        app:tabTextColor="#ced0d3" />
 
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tab_recommend"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="美食" />
+    <!-- View pager to swipe views -->
 
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tab_nearby"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="外帶自取" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tab_food"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="生鮮雜貨" />
-    </com.google.android.material.tabs.TabLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_announcement"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:padding="15dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/foodpanda_announcement"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_tab"
-        android:gravity="center">
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <TextView
-            android:id="@+id/tv_announcement"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="[限時優惠] 生鮮雜貨免運費外送再享3次滿$300現折$100，輸入優惠碼[3X100]，衛生紙、雞蛋火速上門！..." />
-
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:scaleType="centerInside"
-            android:background="@color/foodpanda_announcement"
-            app:srcCompat="@drawable/complain" />
-    </LinearLayout>
-
-
-    <com.example.foodpanda.views.CustomScrollView
-        android:id="@+id/csv_main"
+    <View
+        android:id="@+id/gray_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_announcement">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardElevation="7dp"
-                android:layout_margin="15dp"
-                app:cardCornerRadius="0dp">
-
-                <LinearLayout
-                    android:id="@+id/ll_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:orientation="horizontal">
-                    <ImageButton
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:background="#ffffff"
-                        android:scaleType="centerInside"
-                        app:srcCompat="@drawable/search" />
-                    <EditText
-                        android:id="@+id/editText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:ems="10"
-                        android:hint="搜尋想吃的..."
-                        android:inputType="textPersonName"
-                        android:textSize="16dp" />
-                    <ImageButton
-                        android:id="@+id/imb_controls"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:background="#ffffff"
-                        android:scaleType="centerInside"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/editText"
-                        app:srcCompat="@drawable/controls" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="5dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="再次訂餐"
-                android:textColor="#000000"
-                android:textSize="25dp"
-                android:layout_margin="15dp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_payAgain"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="5dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="本月推薦"
-                android:textColor="#000000"
-                android:textSize="25dp"
-                android:layout_margin="15dp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_recommend"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="5dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="所有餐廳"
-                android:textColor="#000000"
-                android:textSize="25dp"
-                android:layout_margin="15dp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_allRestaurant"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="5dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-            </LinearLayout>
-        </LinearLayout>
-    </com.example.foodpanda.views.CustomScrollView>
-
-
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="#66000000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,31 +11,28 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class JsonAnalysis {
-    public String msg, result, name, photo, friendname, num, otherUserId, friendtoken, image;
-    public ArrayList<Data> friendList = new ArrayList<Data>();
-    public ArrayList<Data> invitationList = new ArrayList<Data>();
+    public String msg, result, name, photo, friendname, num, otherUserId, friendtoken, image, infoUrl, title, titleNum, itemName;
     AllModel shop;
-    static Data datalist;
 
     public AllModel parser (String phpname, String data) throws JSONException {
         JSONObject jsonObjectre = new JSONObject(data);
 
         switch (phpname){
-            case "getData":       //註冊使用者
+            case "getData":       //取得所有店家
                 //JSONArray array = jsonObjectre.getJSONArray("result");
                 result = jsonObjectre.getString("title");
                 image = jsonObjectre.getString("image");
-                shop = new AllModel(image, result);
+                infoUrl = jsonObjectre.getString("infoUrl");
+                shop = new AllModel(image, result, infoUrl);
                 break;
-            case "login":       //登入
+            case "getInfo":       //取得店家商品
                 //JSONArray array = jsonObjectre.getJSONArray("result");
-                result = jsonObjectre.getString("result");
-                msg = jsonObjectre.getString("message");
-                num = jsonObjectre.getString("num");
-                for(int i=0;i<Integer.parseInt(num);i++) {
-                    datalist = new Data(jsonObjectre.getString("friendname"+i),jsonObjectre.getString("friendaccount"+i));
-                    friendList.add(datalist);
-                }
+                String title = jsonObjectre.getString("title");
+                String titleNum = jsonObjectre.getString("titleNum");
+                String itemName = jsonObjectre.getString("itemName");
+                String itemImage = jsonObjectre.getString("itemImage");
+                String itemPrice = jsonObjectre.getString("itemPrice");
+                shop = new AllModel(title, titleNum, itemName, itemImage, itemPrice);
                 break;
             case "fblogin":       //fb註冊使用者
                 //JSONArray array = jsonObjectre.getJSONArray("result");
@@ -70,17 +67,6 @@ public class JsonAnalysis {
                 msg = jsonObjectre.getString("message");
                 otherUserId = jsonObjectre.getString("onlineID");
                 friendtoken = jsonObjectre.getString("friendtoken");
-                break;
-            case "invitation":       //好友邀請
-                //JSONArray array = jsonObjectre.getJSONArray("result");
-                result = jsonObjectre.getString("result");
-                msg = jsonObjectre.getString("message");
-                num = jsonObjectre.getString("num");
-
-                for(int i=0;i<Integer.parseInt(num);i++) {
-                    datalist = new Data(jsonObjectre.getString("friendname"+i),jsonObjectre.getString("friendaccount"+i));
-                    invitationList.add(datalist);
-                }
                 break;
         }
         return shop;
