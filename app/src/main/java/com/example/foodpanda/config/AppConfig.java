@@ -15,7 +15,7 @@ public class AppConfig {
 	/*** 服務 URL */
     private static final String
 	    	FILE_PATH_DEV = "https://172.16.2.114:5210/",
-			FILE_PATH_UAT = "https://foodpandatest.herokuapp.com/",
+			FILE_PATH_UAT = "https://foodpandatestphthon.herokuapp.com/",
 			FILE_PATH_PROD ="https://172.16.2.114:5210/";
 			
 

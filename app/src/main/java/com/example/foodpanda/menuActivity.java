@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
@@ -21,7 +20,6 @@ import com.bumptech.glide.Glide;
 import com.example.foodpanda.Adapter.menuAdaper;
 import com.example.foodpanda.Model.AllModel;
 import com.example.foodpanda.Model.MenuModel;
-import com.example.foodpanda.Model.PIModel;
 import com.example.foodpanda.Service.CallApiTask;
 import com.example.foodpanda.config.AppConfig;
 import com.example.foodpanda.util.DialogUtility;
@@ -31,6 +29,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class menuActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener, CallApiTask.apiCallBack {
     private TabLayout toolbar_tab;
@@ -79,7 +78,9 @@ public class menuActivity extends AppCompatActivity implements AppBarLayout.OnOf
         ProgressDialogUtil progressDialogUtil = new ProgressDialogUtil();
 
         progressDialogUtil.showProgressDialog(mContext);
-        new CallApiTask(mContext, progressDialogUtil, apiCallBack, "getInfo").execute(AppConfig.getUrlPath() + "getInfo.php?infoUrl="+infoUrl);
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("infoUrl", infoUrl);
+        new CallApiTask(mContext, progressDialogUtil, apiCallBack, "getInfo", map).execute(AppConfig.getUrlPath() + "getInfo");
     }
 
     void initView(){
@@ -291,37 +292,37 @@ public class menuActivity extends AppCompatActivity implements AppBarLayout.OnOf
     @Override
     protected void onStop() {
         super.onStop();
-        Toast.makeText(this, "onStop", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "onStop", Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "onDestroy", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "onDestroy", Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Toast.makeText(this, "onPause", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "onPause", Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Toast.makeText(this, "onStart", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "onStart", Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Toast.makeText(this, "onRestart", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "onRestart", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -364,6 +365,11 @@ public class menuActivity extends AppCompatActivity implements AppBarLayout.OnOf
         menuAdaper menuAdaper = new menuAdaper(menuActivity.this, dataList,R.layout.layout_menu_item);
         rvShow.setAdapter(menuAdaper);
 
+    }
+
+    @Override
+    public void result(String s) {
+        Toast.makeText(mContext,s,Toast.LENGTH_SHORT).show();
     }
 
     private int[] convert(String[] string) { //Note the [] after the String.

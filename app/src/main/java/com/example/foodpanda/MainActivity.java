@@ -16,10 +16,12 @@ import android.view.MenuItem;
 import com.example.foodpanda.Adapter.PagerAdapter;
 import com.example.foodpanda.Model.AllModel;
 import com.example.foodpanda.Service.CallApiTask;
+import com.example.foodpanda.config.AppConfig;
 import com.example.foodpanda.fragment.mainFragment;
 import com.example.foodpanda.util.AnimationUtil;
 import com.example.foodpanda.util.MyApplication;
 import com.example.foodpanda.util.ViewUtils;
+import com.example.foodpanda.views.ProgressDialogUtil;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -30,11 +32,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, CallApiTask.apiCallBack {
     private Toolbar toolbar;
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private View mGrayLayout;
     private boolean isPopWindowShowing=false;
     int fromYDelta;
+    private CallApiTask.apiCallBack apiCallBack;
 
 
     @Override
@@ -59,8 +62,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mContext = MainActivity.this;
 
         init();
-        initData();
         initListener();
+        initData();
+
     }
 
     void init() {
@@ -154,11 +158,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else if (tab.getPosition() == 2) {
 
                 } else {
-//                    CallApiTask.apiCallBack apiCallBack =  MainActivity.this;
-//                    ProgressDialogUtil progressDialogUtil = new ProgressDialogUtil();
-//                    progressDialogUtil.showProgressDialog(mContext);
-//                    new CallApiTask(mContext, progressDialogUtil, apiCallBack, "getData").execute(AppConfig.getUrlPath() + "getData.php");
-
+                    ProgressDialogUtil progressDialogUtil = new ProgressDialogUtil();
+                    progressDialogUtil.showProgressDialog(mContext);
+                    apiCallBack = (CallApiTask.apiCallBack) mContext;
+                    new CallApiTask(mContext, progressDialogUtil, apiCallBack, "getData", null).execute(AppConfig.getUrlPath() + "getData");
                 }
             }
 
@@ -269,6 +272,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void result(AllModel s) {
         Fragment transFragment = MyApplication.fragment;
         ((mainFragment) transFragment).showData(s);
+    }
+
+    @Override
+    public void result(String s) {
+        Toast.makeText(mContext,s,Toast.LENGTH_SHORT).show();
     }
 
     private void showPopupWindow(){

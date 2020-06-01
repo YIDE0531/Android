@@ -2,7 +2,6 @@ package com.example.foodpanda.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.ScrollView;
 
 import androidx.core.widget.NestedScrollView;
 

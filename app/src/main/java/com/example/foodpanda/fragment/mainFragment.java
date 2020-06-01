@@ -20,11 +20,7 @@ import com.example.foodpanda.Model.AllModel;
 import com.example.foodpanda.Model.MainModel;
 import com.example.foodpanda.Model.PIModel;
 import com.example.foodpanda.R;
-import com.example.foodpanda.Service.CallApiTask;
-import com.example.foodpanda.config.AppConfig;
 import com.example.foodpanda.util.MyApplication;
-import com.example.foodpanda.views.ProgressDialogUtil;
-
 import java.util.ArrayList;
 
 /**
@@ -46,20 +42,21 @@ public class mainFragment extends Fragment {
     private LinearLayoutManager manager;
     private boolean isScrolled = false;
     private SwipeRefreshLayout swipe_refresh_layout;
-    private CallApiTask.apiCallBack apiCallBack;
+    private View view;
+
 
     //Overriden method onCreateView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mContext = getActivity();
-        View view= inflater.inflate(R.layout.fragment_main, container,false);
-
-        init(view);
-        initData();
-        initListener();
-        //Returning the layout file after inflating
-        //Change R.layout.tab1 in you classes
-
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_main, container, false);
+            init(view);
+            initData();
+            initListener();
+            //Returning the layout file after inflating
+            //Change R.layout.tab1 in you classes
+        }
         return view;
     }
 
@@ -75,7 +72,6 @@ public class mainFragment extends Fragment {
         // 保证容器Activity实现了回调接口 否则抛出异常警告
         try {
             MyApplication.fragment = this;
-            apiCallBack = (CallApiTask.apiCallBack) context;
 
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
@@ -87,11 +83,7 @@ public class mainFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        ProgressDialogUtil progressDialogUtil = new ProgressDialogUtil();
-        progressDialogUtil.showProgressDialog(getActivity());
-        new CallApiTask(getActivity(), progressDialogUtil, apiCallBack, "getData").execute(AppConfig.getUrlPath() + "getData.php");
     }
-
 
     void init(View view) {
         rvallRestaurant = view.findViewById(R.id.recycler_allRestaurant);
