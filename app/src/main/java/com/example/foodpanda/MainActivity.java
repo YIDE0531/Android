@@ -1,10 +1,16 @@
 package com.example.foodpanda;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -17,7 +23,7 @@ import com.example.foodpanda.Adapter.PagerAdapter;
 import com.example.foodpanda.Model.AllModel;
 import com.example.foodpanda.Service.CallApiTask;
 import com.example.foodpanda.config.AppConfig;
-import com.example.foodpanda.fragment.mainFragment;
+import com.example.foodpanda.fragment.main.mainFragment;
 import com.example.foodpanda.util.AnimationUtil;
 import com.example.foodpanda.util.MyApplication;
 import com.example.foodpanda.util.ViewUtils;
@@ -158,10 +164,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else if (tab.getPosition() == 2) {
 
                 } else {
-                    ProgressDialogUtil progressDialogUtil = new ProgressDialogUtil();
-                    progressDialogUtil.showProgressDialog(mContext);
-                    apiCallBack = (CallApiTask.apiCallBack) mContext;
-                    new CallApiTask(mContext, progressDialogUtil, apiCallBack, "getData", null).execute(AppConfig.getUrlPath() + "getData");
+                    String[] permission = {Manifest.permission.ACCESS_FINE_LOCATION};
+                    if (!check(mContext, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                        request(mContext, permission, 110);
+                    }else {
+                        ProgressDialogUtil progressDialogUtil = new ProgressDialogUtil();
+                        progressDialogUtil.showProgressDialog(mContext);
+                        apiCallBack = (CallApiTask.apiCallBack) mContext;
+                        new CallApiTask(mContext, progressDialogUtil, apiCallBack, "getData", null).execute(AppConfig.getUrlPath() + "getData");
+                    }
                 }
             }
 
@@ -378,5 +389,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         isPopWindowShowing=true;
+    }
+
+    /*** 檢查權限 */
+    public static boolean check(Context context, String permission){
+        boolean check = true;
+        if (getAndroidSDK() >= 23) {
+            if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED){
+                check = false;
+            }
+        }
+        return check;
+    }
+
+    /*** 取得 Android SDK API code */
+    public static int getAndroidSDK() {
+        int sdk = 0;
+        try {
+            sdk = Build.VERSION.SDK_INT;
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return sdk;
+    }
+
+    public static void request(Context context, final String[] permissions, final int requestCode){
+        if (getAndroidSDK() < 23) {
+            return;
+        }
+        final Activity activity = (Activity) context;
+        ActivityCompat.requestPermissions(activity, permissions, requestCode);
+    }
+
+    /*** 要求權限的回傳結果 */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 110:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {//同意授權
+                    ProgressDialogUtil progressDialogUtil = new ProgressDialogUtil();
+                    progressDialogUtil.showProgressDialog(mContext);
+                    apiCallBack = (CallApiTask.apiCallBack) mContext;
+                    new CallApiTask(mContext, progressDialogUtil, apiCallBack, "getData", null).execute(AppConfig.getUrlPath() + "getData");
+                } else {//拒絕授權
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[1])) {//按拒絕，未勾選不再詢問
+                        //new Debugeth().start();
+                    } else {//按拒絕並不再詢問
+                        finish();
+                    }
+                }
+                break;
+        }
     }
 }

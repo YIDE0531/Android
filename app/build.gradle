@@ -15,6 +15,14 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            /*** apk file name: for as 3.0 + */
+            android.applicationVariants.all { variant ->
+                variant.outputs.all {
+                    def newName = "foodpanda.apk"
+                    //def newName = "${applicationName}-${variant.buildType.name}-${defaultConfig.versionName}.apk"
+                    outputFileName = newName
+                }
+            }
         }
     }
 }
@@ -34,5 +42,6 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
 }

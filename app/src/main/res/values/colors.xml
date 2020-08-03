@@ -9,4 +9,6 @@
     <color name="foodpanda_announcement">#FFF9E9</color>
     <color name="foodpanda_back">#000000</color>
     <color name="foodpanda_transparent">#00000000</color>
+    <color name="android_default_background">#FAFAFA</color>
+    <color name="android_default_text_color">#808080</color>
 </resources>

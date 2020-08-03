@@ -1,7 +1,6 @@
 package com.example.foodpanda.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.foodpanda.Model.PIModel;
 import com.example.foodpanda.R;
 import com.example.foodpanda.menuActivity;
+import com.example.foodpanda.util.SystemUtility;
 
 import java.util.ArrayList;
 
@@ -48,7 +48,7 @@ public class ProductInformationAdaper extends RecyclerView.Adapter<ProductInform
     @Override
     public void onBindViewHolder(@NonNull ProductInformationAdaper.ViewHandler holder, final int position) {
         Glide.with(context).load(PIModel.get(position).getlangLogoUrl())
-                .thumbnail(Glide.with(context).load(R.drawable.loading))
+                .thumbnail(Glide.with(context).load(R.drawable.loadingpanda))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.imageView);
         holder.tvStoreName.setText(PIModel.get(position).getShopName());
@@ -56,14 +56,11 @@ public class ProductInformationAdaper extends RecyclerView.Adapter<ProductInform
         holder.llMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(context, menuActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("infoUrl", "https://www.foodpanda.com.tw"+PIModel.get(position).getInfoUrl());
                 bundle.putString("ShopName", PIModel.get(position).getShopName());
                 bundle.putString("ShopImage", PIModel.get(position).getlangLogoUrl());
-                intent.putExtras(bundle);
-                context.startActivity(intent);
+                SystemUtility.startActivity(context, menuActivity.class, bundle);
             }
         });
 

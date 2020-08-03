@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.example.foodpanda.R;
+import com.example.foodpanda.WelcomeActivity;
 
 public class DialogUtility {
 	
@@ -21,7 +22,7 @@ public class DialogUtility {
 		if(alignCenter){
 			builder = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.alertdialog_dark_center));
 		}else{
-			builder = new AlertDialog.Builder(context);
+			builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_LIGHT);
 		}
 		return builder;
 	}

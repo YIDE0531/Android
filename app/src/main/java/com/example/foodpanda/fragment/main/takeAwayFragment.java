@@ -1,4 +1,4 @@
-package com.example.foodpanda.fragment;
+package com.example.foodpanda.fragment.main;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

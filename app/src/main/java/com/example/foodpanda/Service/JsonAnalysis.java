@@ -31,7 +31,10 @@ public class JsonAnalysis {
                 String itemName = jsonObjectre.getString("itemName");
                 String itemImage = jsonObjectre.getString("itemImage");
                 String itemPrice = jsonObjectre.getString("itemPrice");
-                shop = new AllModel(title, titleNum, itemName, itemImage, itemPrice);
+                String itemAddress = jsonObjectre.getString("itemAddress");
+                String itemDate = jsonObjectre.getString("itemDate");
+                String itemComment = jsonObjectre.getString("itemComment");
+                shop = new AllModel(title, titleNum, itemName, itemImage, itemPrice, itemAddress, itemDate, itemComment);
                 break;
             case "fblogin":       //fb註冊使用者
                 //JSONArray array = jsonObjectre.getJSONArray("result");

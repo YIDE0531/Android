@@ -1,4 +1,4 @@
-package com.example.foodpanda.fragment;
+package com.example.foodpanda.fragment.main;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -82,6 +82,7 @@ public class mainFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        MyApplication.fragment = this;
 
     }
 
@@ -210,6 +211,7 @@ public class mainFragment extends Fragment {
         rvallRestaurant.setItemAnimator(new DefaultItemAnimator());
         productInformationAdaper = new ProductInformationAdaper(mContext, piModel,R.layout.list_item_template2);
         rvallRestaurant.setAdapter(productInformationAdaper);
+
     }
 
     public static mainFragment newInstance() {
